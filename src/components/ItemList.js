@@ -1,58 +1,51 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { itemsFetchData } from '../actions/items';
-import { clientId, clientSecret, near } from '../secrets'
+import { fetchData, changePage } from '../actions/actions';
 
 class ItemList extends Component {
   componentDidMount() {
-    this.props.fetchData(
-      `https://api.foursquare.com/v2/venues/trending?client_id=${clientId}&client_secret=${clientSecret}&v=20190701&near=${near || 'nyc'}`
-    );
+    let location = 'nyc'
+    this.props.fetchData('items', location);
   }
 
   render() {
     if (this.props.hasErrored) {
-      return <p>There was an error loading the items.</p>;
+      return <p>There was an error loading the items</p>;
     }
 
     if (this.props.isLoading) {
       return <p>Loading…</p>;
     }
 
+    if (this.props.items.length < 1) {
+      return <p>Nothing is trending :(</p>;
+    }
+
     return (
-      <ul style={{
-        maxWidth: '20em',
-        listStyleType: 'none'
-      }}>
+      <ul id='item-list'>
         {this.props.items.map((item) => (
-          <li key={item.id}>
-            <div>
-              <strong style={{ paddingRight: '.5em' }}>
-                <a href='' title={item.venuePage && item.venuePage.id}>
-                  {item.name}
-                </a>
-              </strong>
+          <li key={item.id} onClick={() => {
+            this.props.fetchData('venue', item.id);
+            this.props.changePage('two');
+          }}>
+            <div className='col-main'>
+              <div className='venue-title' title={item.venuePage && item.venuePage.id}>
+                {item.name}
+              </div>
+              <div className='venue-address'>
+                {item.location.formattedAddress[0]}
+              </div>
+
+            </div>
+            <div className='col-icon'>
               {item.categories.map(category => {
                 return <img
                   key={category.id}
-                  style={{
-                    width: '1.5em',
-                    height: '1.5em',
-                    marginLeft: '.5em',
-                    float: 'right',
-                    backgroundColor:'black',
-                    borderRadius:'50%'
-                  }}
+                  className='category-icon'
                   src={category.icon.prefix + '32' + category.icon.suffix}
                   title={category.name} />
               })}
             </div>
-            <div style={{ paddingTop: '.25em' }}>
-              <small><em>
-                {item.location.formattedAddress[0]}
-              </em></small>
-            </div>
-            <hr/>
           </li>
         ))}
       </ul>
@@ -70,14 +63,15 @@ ItemList.propTypes = {
 const mapStateToProps = (state) => {
   return {
     items: state.items,
-    hasErrored: state.itemsHasErrored,
-    isLoading: state.itemsIsLoading
+    hasErrored: state.fetchDataHasErrored,
+    isLoading: state.fetchDataIsLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(itemsFetchData(url))
+    fetchData: (type, data) => dispatch(fetchData(type, data)),
+    changePage: (page) => dispatch(changePage(page))
   };
 };
 

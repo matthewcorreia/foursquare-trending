@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { items, itemsHasErrored, itemsIsLoading } from './items';
+import { items, venue, page, fetchDataHasErrored, fetchDataIsLoading } from './reducers';
 
 export default combineReducers({
   items,
-  itemsHasErrored,
-  itemsIsLoading
+  venue,
+  page,
+  fetchDataHasErrored,
+  fetchDataIsLoading
 });
