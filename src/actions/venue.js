@@ -41,3 +41,7 @@ export function fetchVenue(venueId) {
       .catch(() => dispatch(fetchVenueHasErrored(true)));
   };
 }
+
+export function clearVenue() {
+  return (dispatch) => dispatch(fetchVenueSuccess({}));
+}

@@ -24,8 +24,8 @@ class ItemList extends Component {
 
     return (
       <ul id='item-list'>
-        {this.props.items.map((item) => (
-          <li key={item.id} onClick={() => {
+        {this.props.items.map(item => {
+          return <li key={item.id} onClick={() => {
             this.props.fetchVenue(item.id);
             this.props.changePage('two');
           }}>
@@ -48,7 +48,7 @@ class ItemList extends Component {
               })}
             </div>
           </li>
-        ))}
+        })}
       </ul>
     );
   }
