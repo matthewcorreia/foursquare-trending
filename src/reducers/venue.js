@@ -1,6 +1,6 @@
-export function fetchDataHasErrored(state = false, action) {
+export function fetchVenueHasErrored(state = false, action) {
   switch (action.type) {
-    case 'FETCH_DATA_HAS_ERRORED':
+    case 'FETCH_VENUE_HAS_ERRORED':
       return action.hasErrored;
 
     default:
@@ -8,20 +8,10 @@ export function fetchDataHasErrored(state = false, action) {
   }
 }
 
-export function fetchDataIsLoading(state = false, action) {
+export function fetchVenueIsLoading(state = false, action) {
   switch (action.type) {
-    case 'FETCH_DATA_IS_LOADING':
+    case 'FETCH_VENUE_IS_LOADING':
       return action.isLoading;
-
-    default:
-      return state;
-  }
-}
-
-export function items(state = [], action) {
-  switch (action.type) {
-    case 'FETCH_DATA_SUCCESS_ITEMS':
-      return action.items;
 
     default:
       return state;
@@ -30,7 +20,7 @@ export function items(state = [], action) {
 
 export function venue(state = {}, action) {
   switch (action.type) {
-    case 'FETCH_DATA_SUCCESS_VENUE':
+    case 'FETCH_VENUE_SUCCESS':
       return action.venue;
 
     default:

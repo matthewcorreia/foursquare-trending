@@ -1,10 +1,15 @@
 import { combineReducers } from 'redux';
-import { items, venue, page, fetchDataHasErrored, fetchDataIsLoading } from './reducers';
+import { items, fetchItemsHasErrored, fetchItemsIsLoading } from './items';
+import { venue, fetchVenueHasErrored, fetchVenueIsLoading } from './venue';
+import { page } from './common';
+
 
 export default combineReducers({
   items,
   venue,
   page,
-  fetchDataHasErrored,
-  fetchDataIsLoading
+  fetchItemsHasErrored,
+  fetchItemsIsLoading,
+  fetchVenueHasErrored,
+  fetchVenueIsLoading
 });

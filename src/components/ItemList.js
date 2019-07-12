@@ -1,31 +1,32 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchData, changePage } from '../actions/actions';
+import { changePage } from '../actions/common';
+import { fetchItems } from '../actions/items';
+import { fetchVenue } from '../actions/venue';
+
 
 class ItemList extends Component {
   componentDidMount() {
     let location = 'nyc'
-    this.props.fetchData('items', location);
+    this.props.fetchItems(location);
   }
 
   render() {
     if (this.props.hasErrored) {
-      return <p>There was an error loading the items</p>;
+      return <p className='status'>There was an error loading the items</p>;
     }
 
     if (this.props.isLoading) {
-      return <p>Loading…</p>;
-    }
-
-    if (this.props.items.length < 1) {
-      return <p>Nothing is trending :(</p>;
+      return <p className='status'>Loading…</p>
+    } else if (this.props.items.length < 1) {
+      return <p className='status'>Nothing is trending</p>
     }
 
     return (
       <ul id='item-list'>
         {this.props.items.map((item) => (
           <li key={item.id} onClick={() => {
-            this.props.fetchData('venue', item.id);
+            this.props.fetchVenue(item.id);
             this.props.changePage('two');
           }}>
             <div className='col-main'>
@@ -54,7 +55,8 @@ class ItemList extends Component {
 }
 
 ItemList.propTypes = {
-  fetchData: PropTypes.func.isRequired,
+  fetchItems: PropTypes.func.isRequired,
+  fetchVenue: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
@@ -63,14 +65,15 @@ ItemList.propTypes = {
 const mapStateToProps = (state) => {
   return {
     items: state.items,
-    hasErrored: state.fetchDataHasErrored,
-    isLoading: state.fetchDataIsLoading
+    hasErrored: state.fetchItemsHasErrored,
+    isLoading: state.fetchItemsIsLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (type, data) => dispatch(fetchData(type, data)),
+    fetchItems: (loc) => dispatch(fetchItems(loc)),
+    fetchVenue: (id) => dispatch(fetchVenue(id)),
     changePage: (page) => dispatch(changePage(page))
   };
 };
